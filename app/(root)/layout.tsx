@@ -15,4 +15,4 @@ if(!isUserAuthenticated) redirect("/sign-in");
   )
 }
 
-export default RootLayout
+export default RootLayout;
