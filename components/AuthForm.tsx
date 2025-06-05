@@ -9,6 +9,12 @@ import Link from "next/link";
 import { toast } from "sonner";
 import CustomFormField from "./CustomFormField";
 import { useRouter } from "next/navigation";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { signIn, signUp } from "@/lib/actions/auth.action";
 
 const authFormSchema = ({ type }: { type: "sign-in" | "sign-up" }) => {
   return z.object({
@@ -49,20 +55,69 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
+        const { name, email, password } = values;
+        const userCredentials = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const result = await signUp({
+          uid: userCredentials.user.uid,
+          name: name!,
+          email,
+          password,
+        });
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
         toast.success(
           "Your account has been created successfully! Please sign in."
         );
         router.push("/sign-in");
       } else {
+        const { email, password } = values;
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const idToken = await userCredential.user.getIdToken();
+        if (!idToken) {
+          toast.error("Failed to retrieve ID token.");
+          return;
+        }
+        await signIn({
+          email,
+          idToken,
+        });
         toast.success("You have signed in successfully!");
         router.push("/");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(`An error occurred: ${error}`);
+    } catch (error: any) {
+      console.error("Sign-in error:", error);
+
+      const errorCode = error.code;
+
+      switch (errorCode) {
+        case "auth/user-not-found":
+          toast.error("No account found with this email.");
+          break;
+        case "auth/invalid-credential":
+          toast.error("Incorrect password. Please double-check and try again.");
+          break;
+        case "auth/too-many-requests":
+          toast.error("Too many attempts. Please wait a moment and try again.");
+          break;
+        case "auth/invalid-email":
+          toast.error("That doesn’t look like a valid email.");
+          break;
+        default:
+          toast.error("Something went wrong. Please try again later.");
+      }
     }
   }
 
