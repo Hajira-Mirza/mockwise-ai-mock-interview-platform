@@ -213,7 +213,7 @@ export const dummyInterviews: Interview[] = [
     techstack: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
     level: "Junior",
     questions: ["What is React?"],
-    finalized: false,
+    finalized: true,
     createdAt: "2024-03-15T10:00:00Z",
   },
   {
