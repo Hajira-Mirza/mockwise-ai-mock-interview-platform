@@ -97,6 +97,107 @@ export const mappings = {
   "aws amplify": "amplify",
 };
 
+export const roleIcons: Record<string, string> = {
+  // Development & Engineering
+  "frontend developer": "material-symbols:code",
+  "backend developer": "mdi:server",
+  "fullstack developer": "carbon:application-web",
+  "software engineer": "tabler:code",
+  "mobile developer": "mdi:cellphone-android",
+  "ios developer": "mdi:apple-ios",
+  "android developer": "mdi:android",
+  "react developer": "mdi:react",
+  "node developer": "simple-icons:nodedotjs",
+  "python developer": "mdi:language-python",
+  "java developer": "mdi:language-java",
+  "golang developer": "mdi:language-go",
+  "php developer": "mdi:language-php",
+  "ruby developer": "mdi:language-ruby-on-rails",
+  "devops engineer": "mdi:cloud-sync",
+  "qa engineer": "mdi:bug-check",
+  "ml engineer": "mdi:brain",
+  "ai engineer": "mdi:robot",
+  "data analyst": "mdi:chart-bar",
+  "data scientist": "mdi:chart-line",
+  "system administrator": "mdi:server-security",
+  "security engineer": "mdi:shield-lock",
+  "network engineer": "mdi:lan-connect",
+  "database administrator": "mdi:database-cog",
+  "blockchain developer": "mdi:link-variant",
+  "cloud engineer": "mdi:cloud-outline",
+  "site reliability engineer": "mdi:server-network",
+  "test engineer": "mdi:bug-outline",
+
+  // Design & Creative
+  "ui designer": "mdi:palette-swatch",
+  "ux designer": "mdi:gesture-tap",
+  "graphic designer": "mdi:brush",
+  "product designer": "mdi:shape",
+  "motion designer": "mdi:play-circle",
+  "illustrator": "mdi:vector-square",
+  "video editor": "mdi:video",
+  "animator": "mdi:animation-play",
+
+  // Product & Project
+  "product manager": "mdi:clipboard-account",
+  "project manager": "mdi:clipboard-text-clock",
+  "scrum master": "mdi:chart-timeline",
+  "business analyst": "mdi:briefcase-search",
+  "program manager": "mdi:clipboard-flow",
+  "technical writer": "mdi:file-document-edit",
+
+  // IT Support & Admin
+  "technical support": "mdi:headset",
+  "it support specialist": "mdi:laptop",
+  "help desk technician": "mdi:account-question",
+  "network technician": "mdi:lan",
+  "desktop support": "mdi:monitor",
+  "it administrator": "mdi:account-wrench",
+  "cybersecurity analyst": "mdi:security",
+
+  // HR & People Ops
+  "hr manager": "mdi:account-multiple",
+  "recruiter": "mdi:magnify",
+  "talent acquisition": "mdi:account-search",
+  "people operations": "mdi:account-group-outline",
+  "training specialist": "mdi:school",
+
+  // Marketing & Sales
+  "marketing manager": "mdi:bullhorn",
+  "content writer": "mdi:pencil-box",
+  "seo specialist": "mdi:google",
+  "social media manager": "mdi:instagram",
+  "copywriter": "mdi:file-document",
+  "sales manager": "mdi:currency-usd",
+  "account executive": "mdi:account-cash",
+  "customer success": "mdi:account-heart",
+  "customer support": "mdi:headphones",
+  "growth marketer": "mdi:trending-up",
+  "email marketer": "mdi:email-fast",
+  "digital marketer": "mdi:web",
+  "product marketer": "mdi:package-variant-closed",
+
+  // Executive & Leadership
+  "cto": "mdi:account-tie",
+  "ceo": "mdi:account-star",
+  "coo": "mdi:account-supervisor",
+  "cmo": "mdi:bullhorn-outline",
+  "cfo": "mdi:cash-multiple",
+  "head of engineering": "mdi:office-building-cog",
+  "engineering manager": "mdi:account-cog",
+  "vp of product": "mdi:clipboard-text-multiple",
+
+  // Others
+  "intern": "mdi:account-school",
+  "freelancer": "mdi:laptop-account",
+  "student": "mdi:school-outline",
+  "researcher": "mdi:magnify-scan",
+  "teacher": "mdi:teach",
+  "coach": "mdi:whistle",
+  "consultant": "mdi:account-tie-outline",
+};
+
+
 // export const interviewer: CreateAssistantDTO = {
 //   name: "Interviewer",
 //   firstMessage:
@@ -189,20 +290,7 @@ export const mappings = {
 //   finalAssessment: z.string(),
 // });
 
-export const interviewCovers = [
-  "/adobe.png",
-  "/amazon.png",
-  "/facebook.png",
-  "/hostinger.png",
-  "/pinterest.png",
-  "/quora.png",
-  "/reddit.png",
-  "/skype.png",
-  "/spotify.png",
-  "/telegram.png",
-  "/tiktok.png",
-  "/yahoo.png",
-];
+
 
 export const dummyInterviews: Interview[] = [
   {
