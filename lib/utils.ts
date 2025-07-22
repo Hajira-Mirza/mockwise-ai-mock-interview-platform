@@ -41,8 +41,9 @@ export const getTechLogos = async (techArray: string[]) => {
   return results;
 };
 
-export const getRoleIconUrl = (role: string) => {
-  const key = role.toLowerCase().trim();
+export const getRoleIcon = (role?: string) => {
+  const key = role?.toLowerCase().trim() || "";
   const icon = roleIcons[key] || "mdi:account-outline";
-  return `https://api.iconify.design/${icon}.svg`;
+  const encodedIcon = encodeURIComponent(icon);
+  return `https://api.iconify.design/${encodedIcon}.svg`;
 };
