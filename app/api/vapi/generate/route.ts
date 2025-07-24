@@ -1,19 +1,20 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { db } from "@/firebase/admin";
+import { getRoleIconName } from "@/lib/utils";
 export async function GET() {
   return Response.json({ success: true, data: "Thank You" }, { status: 200 });
 }
 
 export async function POST(request: Request) {
-  const { type, role, level, amount, techstack, userid, coverurl, } =
-    await request.json();
+  const { type, role, level, amount, techstack, userid } = await request.json();
   try {
+    const roleIconUrl = getRoleIconName(role);
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
       prompt: `Prepare questions for a job interview.
       The job role is: ${role}.
-      The job cover URL is: ${coverurl}.
+      The job cover URL is: ${roleIconUrl}.
       The job experience is: ${level}.
       The number of questions to generate is: ${amount}.
       The tech stack used in the job is: ${techstack}.
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
       questions: JSON.parse(questions),
       userId: userid,
       finalized: true,
-      coverImage: coverurl,
+      coverImage: roleIconUrl,
       createdAt: new Date().toISOString(),
     };
 

@@ -2,6 +2,9 @@ import { roleIcons, mappings } from "@/constants";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+
+const fallbackIcon = "mdi:account-outline";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -41,9 +44,12 @@ export const getTechLogos = async (techArray: string[]) => {
   return results;
 };
 
-export const getRoleIcon = (role?: string) => {
+export const getRoleIconName = (role?: string): string => {
   const key = role?.toLowerCase().trim() || "";
-  const icon = roleIcons[key] || "mdi:account-outline";
-  const encodedIcon = encodeURIComponent(icon);
-  return `https://api.iconify.design/${encodedIcon}.svg`;
+  return roleIcons[key] || fallbackIcon;
+};
+
+export const getRoleIconUrl = (role?: string): string => {
+  const iconName = getRoleIconName(role);
+  return `https://api.iconify.design/${encodeURIComponent(iconName)}.svg`;
 };

@@ -1,4 +1,4 @@
-import { getRandomInterviewCover } from "@/lib/utils";
+import { getRoleIconUrl } from "@/lib/utils";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { Button } from "./ui/button";
@@ -6,7 +6,7 @@ import Link from "next/link";
 import DisplayTechIcons from "./DisplayTechIcons";
 
 const InterviewCard = ({
-  interviewId,
+  id,
   userId,
   role,
   type,
@@ -29,11 +29,11 @@ const InterviewCard = ({
             <p className="badge-text">{normalizedType}</p>
           </div>
           <Image
-            src={getRandomInterviewCover()}
-            alt="Interview Cover"
-            width={90}
-            height={90}
-            className="rounded-full object-fit size-[90px]"
+            src={getRoleIconUrl(role)}
+            alt="cover-image"
+            width={40}
+            height={40}
+            className="rounded-full object-cover size-[90px] border bg-dark-300"
           />
           <h3 className="mt-5 capitalize">{role} Interview</h3>
           <div className="flex flex-row gap-5 mt-3">
@@ -57,12 +57,14 @@ const InterviewCard = ({
           </p>
         </div>
         <div className="flex flex-row justify-between">
-            <DisplayTechIcons techStack={techstack} />
-            <Button className="btn-primary">
-                <Link href={feedback ? `/interview/${interviewId}/feedback` : `/interview/${interviewId}`}>
-                  {feedback ? "View Feedback" : "Take Interview"}
-                </Link>
-            </Button>
+          <DisplayTechIcons techStack={techstack} />
+          <Button className="btn-primary">
+            <Link
+              href={feedback ? `/interview/${id}/feedback` : `/interview/${id}`}
+            >
+              {feedback ? "View Feedback" : "Take Interview"}
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
