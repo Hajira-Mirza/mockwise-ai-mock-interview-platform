@@ -1,4 +1,4 @@
-import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
+import { CreateAssistantDTO, CreateWorkflowDTO } from "@vapi-ai/web/dist/api";
 import { z } from "zod";
 
 export const mappings = {
@@ -197,10 +197,239 @@ export const roleIcons: Record<string, string> = {
   "consultant": "mdi:account-tie-outline",
 };
 
+export const generator: CreateWorkflowDTO = {
+  "name": "interview_prep",
+  "nodes": [
+    {
+      "name": "start",
+      "type": "conversation",
+      "isStart": true,
+      "metadata": {
+        "position": {
+          "x": -712.1639184361501,
+          "y": -531.4712480030526
+        }
+      },
+      "prompt": "Greet the user. Inform them that you will get some information from them, to create a perfect interview. Ask the caller for data required to extract. Ask the questions one by one, and await an answer.",
+      "model": {
+        "model": "gpt-4.1-nano",
+        "provider": "openai",
+        "maxTokens": 1000,
+        "temperature": 0.7
+      },
+      "voice": {
+        "model": "aura-2",
+        "voiceId": "thalia",
+        "provider": "deepgram"
+      },
+      "variableExtractionPlan": {
+        "output": [
+          {
+            "enum": [
+              "junior",
+              "mid",
+              "senior"
+            ],
+            "type": "string",
+            "title": "level",
+            "description": "Job experience level."
+          },
+          {
+            "enum": [],
+            "type": "number",
+            "title": "amount",
+            "description": "How many questions would you like me to generate?"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "techstack",
+            "description": "Are there any specific tools or technologies you'd like me to focus on?"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "role",
+            "description": "What role would you like to train for? "
+          },
+          {
+            "enum": [
+              "technical",
+              "behavioral",
+              "mixed"
+            ],
+            "type": "string",
+            "title": "type",
+            "description": "What kind of interview would you like—technical, behavioral, or a mix of both?"
+          }
+        ]
+      },
+      "messagePlan": {
+        "firstMessage": "Hey {{ username }}! Let's prepare your interview. I'll ask a few questions and generate the perfect interview just for you. Are you ready?"
+      },
+      "toolIds": []
+    },
+    {
+      "name": "apiRequest_1751592752934",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -713.3548305130721,
+          "y": -47.34394676479753
+        }
+      },
+      "tool": {
+        "url": "https://mockwise-ai-mock-interview-platform.vercel.app/api/vapi/generate",
+        "body": {
+          "type": "object",
+          "required": [
+            "role",
+            "type",
+            "level",
+            "amount",
+            "userid"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "value": "({ role })",
+              "description": ""
+            },
+            "type": {
+              "type": "string",
+              "value": "({ type })",
+              "description": ""
+            },
+            "level": {
+              "type": "string",
+              "value": "({ level })",
+              "description": ""
+            },
+            "amount": {
+              "type": "number",
+              "value": "({ amount })",
+              "description": ""
+            },
+            "userid": {
+              "type": "string",
+              "value": "({ userid })",
+              "description": ""
+            },
+            "techstack": {
+              "type": "string",
+              "value": "({ techstack })",
+              "description": ""
+            }
+          }
+        },
+        "name": "getUserData",
+        "type": "apiRequest",
+        "method": "POST",
+        "function": {
+          "name": "untitled_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          }
+        },
+        "messages": [
+          {
+            "type": "request-start",
+            "content": "Please bear with me. I'm sending a request to the app.",
+            "blocking": true
+          },
+          {
+            "role": "assistant",
+            "type": "request-complete",
+            "content": "The request has been generated. Thank you for the call, and best of luck!",
+            "endCallAfterSpokenEnabled": true
+          },
+          {
+            "type": "request-failed",
+            "content": "Oops! Looks like something went wrong when sending the data to the app! Please try again.",
+            "endCallAfterSpokenEnabled": true
+          }
+        ],
+        "variableExtractionPlan": {
+          "schema": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          },
+          "aliases": []
+        }
+      }
+    },
+    {
+      "name": "hangup_1751594224016",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -713.6548356100635,
+          "y": 177.5121276393574
+        }
+      },
+      "tool": {
+        "type": "endCall",
+        "function": {
+          "name": "untitled_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          }
+        },
+        "messages": [
+          {
+            "type": "request-start",
+            "content": "Your interview has been generated. I'll redirect you to the dashboard now, thank you for calling!",
+            "blocking": true
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "apiRequest_1751592752934",
+      "condition": {
+        "type": "ai",
+        "prompt": "If the user user provides all the data to be extracted."
+      }
+    },
+    {
+      "from": "apiRequest_1751592752934",
+      "to": "hangup_1751594224016",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    }
+  ],
+  "model": {
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "system",
+        "content": "## identity & purpose\n\nYou are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters."
+      }
+    ],
+    "provider": "openai",
+    "temperature": 0.7
+  },
+  "voice": {
+    "voiceId": "Spencer",
+    "provider": "vapi"
+  },
+  "globalPrompt": "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters."
+};
+
 export const interviewer: CreateAssistantDTO = {
   name: "Interviewer",
   firstMessage:
-    "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
+    "Hi, welcome to your interview! Let's start with a quick introduction. Tell me a bit about yourself and your background.",
   transcriber: {
     provider: "deepgram",
     model: "nova-2",
@@ -231,21 +460,20 @@ Engage naturally & react appropriately:
 Listen actively to responses and acknowledge them before moving forward.
 Ask brief follow-up questions if a response is vague or requires more detail.
 Keep the conversation flowing smoothly while maintaining control.
-Be professional, yet warm and welcoming:
 
+Be professional, yet warm and welcoming:
 Use official yet friendly language.
 Keep responses concise and to the point (like in a real voice interview).
 Avoid robotic phrasing—sound natural and conversational.
-Answer the candidate’s questions professionally:
 
-If asked about the role, company, or expectations, provide a clear and relevant answer.
-If unsure, redirect the candidate to HR for more details.
+Always ask the candidate for their questions:
+At the end of the interview, ask if they have any questions for you.
+If they ask questions, provide clear and relevant answers.
 
 Conclude the interview properly:
 Thank the candidate for their time.
-Inform them that the company will reach out soon with feedback.
+Let them know that feedback will be shared soon.
 End the conversation on a polite and positive note.
-
 
 - Be sure to be professional and polite.
 - Keep all your responses short and simple. Use official language, but be kind and welcoming.
